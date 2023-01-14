@@ -1,13 +1,14 @@
 import {
   IsEmail,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsString,
+  IsUUID,
 } from 'class-validator';
 
 export class UpdateUserDto {
-  @IsNumber()
+  @IsString()
+  @IsUUID()
   id?: number;
 
   @IsString()
