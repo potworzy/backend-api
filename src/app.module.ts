@@ -14,7 +14,6 @@ import { VoteModule } from './game/round/vote/vote.module';
 import { Round } from './game/round/round.entity';
 import { Vote } from './game/round/vote/vote.entity';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({

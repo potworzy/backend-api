@@ -13,8 +13,8 @@ export class User extends BaseEntity {
   @Column({ unique: true })
   email: string;
 
-  @Exclude()
   @Column()
+  @Exclude({ toPlainOnly: true })
   password: string;
 
   // @Column({
@@ -38,4 +38,7 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Vote, (vote) => vote.user)
   votes: Vote[];
+
+  @OneToMany(() => Game, (game) => game.moderator)
+  gamesMod: Game[];
 }
