@@ -5,8 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
-import { finished } from 'stream';
-import { And, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { GameService } from '../game.service';
 import { CreateRoundDto } from './dto/create-round.dto';
 import { UpdateRoundDto } from './dto/update-round.dto';
