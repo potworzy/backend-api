@@ -34,7 +34,6 @@ export class AuthService {
     if (!validPassword) {
       throw new BadRequestException('Wrong credentials');
     }
-
     return user;
   }
 

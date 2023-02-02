@@ -5,7 +5,11 @@ import { ValidationPipe } from '@nestjs/common';
 import { DatabaseExceptionFilter } from './filters/database-exception.filters';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule);
+  app.enableCors({
+    credentials: true,
+    origin: 'http://localhost:4200',
+  });
   app.setGlobalPrefix('api/v1');
   app.use(cookieParser());
   //whitelist — removes any property of query, body, and a parameter that is not part of our DTO
