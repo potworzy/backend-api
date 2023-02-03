@@ -20,11 +20,12 @@ import { GameService } from './game.service';
 @UseGuards(JwtAuthGuard)
 export class GameController {
   constructor(private readonly gameService: GameService) {}
-  @Post('mygames')
+  @Get('mygames')
   async getOwnerGames(@Req() req: Request) {
+    console.log('wysyłam')
     return await this.gameService.getMyGames(req);
   }
-  @Get(':id')
+  @Get('mygames/:id')
   async getById(@Param('id') id: string): Promise<Game> {
     return this.gameService.getById(id);
   }
