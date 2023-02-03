@@ -1,8 +1,6 @@
-import { PartialType } from '@nestjs/mapped-types';
 import { IsBoolean, IsNumber, IsString } from 'class-validator';
-import { GameDto } from './game.dto';
 
-export class UpdateGameDto extends PartialType(GameDto) {
+export class GameDto {
   @IsString()
   name?: string;
 

@@ -28,13 +28,12 @@ export class AuthService {
   async login({ email, password }: LoginUserDto) {
     const user = await this.userService.findOne({ where: { email: email } });
     if (!user) {
-      throw new BadRequestException('User does not exist'); //TODO zmienić komunikat na taki sam dla user i password
+      throw new BadRequestException('Wrong credentials');
     }
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
-      throw new BadRequestException('Wrong password');
+      throw new BadRequestException('Wrong credentials');
     }
-
     return user;
   }
 

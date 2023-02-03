@@ -1,34 +1,39 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { VoteService } from './vote.service';
-import { CreateVoteDto } from './dto/create-vote.dto';
-import { UpdateVoteDto } from './dto/update-vote.dto';
+import { Request } from 'express';
+import { JwtAuthGuard } from '../../../guards/jwt-auth.guard';
 
 @Controller('vote')
+@UseGuards(JwtAuthGuard)
 export class VoteController {
   constructor(private readonly voteService: VoteService) {}
 
-  @Post()
-  create(@Body() createVoteDto: CreateVoteDto) {
-    return this.voteService.create(createVoteDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.voteService.findAll();
-  }
-
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.voteService.findOne(+id);
+  findAll(@Param('id') roundId: string) {
+    return this.voteService.findAll(roundId);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateVoteDto: UpdateVoteDto) {
-    return this.voteService.update(+id, updateVoteDto);
+  update(
+    @Param('id') roundId: string,
+    @Body('value') value: string,
+    @Body('id') id: string,
+    @Req() req: Request,
+  ) {
+    return this.voteService.update(roundId, req, +value, id);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.voteService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.voteService.remove(+id);
+  // }
 }
