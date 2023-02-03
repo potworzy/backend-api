@@ -1,25 +1,19 @@
+import { BaseEntity } from '../../database/base.entity';
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 import { Exclude } from 'class-transformer';
-import {
-  BeforeInsert,
-  BeforeUpdate,
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Game } from '../../game/game.entity';
+import { Vote } from '../../game/round/vote/vote.entity';
 //import { Role } from '../../decorators/roles.enum';
 
 @Entity()
-export class User {
-  @PrimaryGeneratedColumn()
-  id?: number;
-
-  @Column({ nullable: true })
-  name?: string;
+export class User extends BaseEntity {
+  @Column()
+  name: string;
 
   @Column({ unique: true })
   email: string;
 
-  // @Exclude()
+  @Exclude()
   @Column()
   password: string;
 
@@ -38,4 +32,10 @@ export class User {
   emailToLowerCase() {
     this.email = this.email.toLowerCase();
   }
+
+  @OneToMany(() => Game, (game) => game.user)
+  games: Game[];
+
+  @OneToMany(() => Vote, (vote) => vote.user)
+  votes: Vote[];
 }

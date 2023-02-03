@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { UseInterceptors } from '@nestjs/common/decorators';
 import { ClassSerializerInterceptor } from '@nestjs/common/serializer';
+import { Response, Request } from 'express';
 import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
 import { RefreshAuthGuard } from '../../guards/refresh.guard';
 import { CreateUserDto } from '../user/dto/create-user.dto';
@@ -24,7 +25,10 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  async register(@Body() { email, password, name }: CreateUserDto, @Res() res) {
+  async register(
+    @Body() { email, password, name }: CreateUserDto,
+    @Res() res: Response,
+  ) {
     const user = await this.authService.register({ email, password, name });
     await this.authService.setAuthToken(res, {
       user_id: user.id,
@@ -37,7 +41,7 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async login(@Body() { email, password }: LoginUserDto, @Res() res) {
+  async login(@Body() { email, password }: LoginUserDto, @Res() res: Response) {
     const user = await this.authService.login({ email, password });
     await this.authService.setAuthToken(res, {
       user_id: user.id,
@@ -52,16 +56,16 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   async logout(@Req() req, @Res() res) {
     await this.authService.clearAuthTokens(res, req.user.id);
-
+    console.log('logout');
     return res.json({
       message: 'Logged out',
     });
   }
 
-  @Post('refresh')
+  @Get('refresh')
   @UseGuards(RefreshAuthGuard)
   @HttpCode(HttpStatus.OK)
-  async refresh(@Req() req, @Res() res) {
+  async refresh(@Req() req, @Res({ passthrough: true }) res: Response) {
     await this.authService.tokenIsActive(
       req?.cookies?.['refresh_token'],
       req.user.refreshToken,

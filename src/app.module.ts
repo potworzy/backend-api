@@ -6,7 +6,14 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { User } from './auth/user/user.entity';
 import { DatabaseModule } from './database/database.module';
+import { GameModule } from './game/game.module';
 import * as Joi from '@hapi/joi';
+import { Game } from './game/game.entity';
+import { RoundModule } from './game/round/round.module';
+import { VoteModule } from './game/round/vote/vote.module';
+import { Round } from './game/round/round.entity';
+import { Vote } from './game/round/vote/vote.entity';
+
 
 @Module({
   imports: [
@@ -21,7 +28,7 @@ import * as Joi from '@hapi/joi';
         PORT: Joi.number(),
       }),
     }),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Game, Round, Vote]),
     TypeOrmModule.forRoot({
       type: 'postgres',
       url: process.env.DATABASE_URL,
@@ -30,6 +37,9 @@ import * as Joi from '@hapi/joi';
     }),
     AuthModule,
     DatabaseModule,
+    GameModule,
+    RoundModule,
+    VoteModule,
   ],
   controllers: [AppController],
   providers: [AppService],

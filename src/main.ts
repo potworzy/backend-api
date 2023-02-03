@@ -13,6 +13,10 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   app.useGlobalFilters(new DatabaseExceptionFilter());
   await app.listen(process.env.PORT);
+  app.enableCors({
+    origin: 'http://localhost:4200',
+    credentials: true,
+  });
   console.log(`My server is running on port ${process.env.PORT}`);
 }
 bootstrap();

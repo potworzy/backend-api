@@ -1,13 +1,21 @@
-import { applyIsOptionalDecorator } from '@nestjs/mapped-types';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
 export class UpdateUserDto {
-  @IsNumber()
+  @IsString()
+  @IsUUID()
   id?: number;
 
   @IsString()
-  name?: string;
+  name: string;
 
+  @IsNotEmpty()
+  @IsEmail()
   @IsString()
   email: string;
 
