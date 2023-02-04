@@ -4,7 +4,7 @@ import { GameDto } from './game.dto';
 
 export class UpdateGameDto extends PartialType(GameDto) {
   @IsString()
-  name?: string;
+  title?: string;
 
   @IsString()
   descripton?: string;

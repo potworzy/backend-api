@@ -6,10 +6,10 @@ import { Round } from './round/round.entity';
 @Entity()
 export class Game extends BaseEntity {
   @Column()
-  name: string;
+  title: string;
 
   @Column({ nullable: true })
-  descripton: string;
+  description: string;
 
   @Column({ default: false })
   finished: boolean;

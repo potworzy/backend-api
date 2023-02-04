@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -22,7 +24,7 @@ export class GameController {
   constructor(private readonly gameService: GameService) {}
   @Get('mygames')
   async getOwnerGames(@Req() req: Request) {
-    console.log('wysyłam')
+    console.log('wysyłam');
     return await this.gameService.getMyGames(req);
   }
   @Get('mygames/:id')
@@ -30,13 +32,14 @@ export class GameController {
     return this.gameService.getById(id);
   }
   @Post('create')
+  @HttpCode(HttpStatus.OK)
   async createGame(
-    @Body() { name, descripton }: CreateGameDto,
-    @Req() req,
+    @Body() { title, description }: CreateGameDto,
+    @Req() req: Request,
   ): Promise<Game> {
     return await this.gameService.createGame({
-      name,
-      descripton,
+      title,
+      description,
       user: req.user,
     });
   }

@@ -7,22 +7,24 @@ import {
   Post,
   Req,
   Res,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
-import { UseInterceptors } from '@nestjs/common/decorators';
-import { ClassSerializerInterceptor } from '@nestjs/common/serializer';
+import { JwtService } from '@nestjs/jwt';
 import { Response, Request } from 'express';
 import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
 import { RefreshAuthGuard } from '../../guards/refresh.guard';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { LoginUserDto } from '../user/dto/login-user.dto';
-import { User } from '../user/user.entity';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
 //@UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private jwtService: JwtService,
+  ) {}
 
   @Post('register')
   async register(
@@ -56,7 +58,6 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   async logout(@Req() req, @Res() res) {
     await this.authService.clearAuthTokens(res, req.user.id);
-    console.log('logout');
     return res.json({
       message: 'Logged out',
     });
@@ -78,5 +79,16 @@ export class AuthController {
     res.json({
       message: 'Token refreshed',
     });
+  }
+  @Get('user')
+  @UseGuards(JwtAuthGuard)
+  async getUser(@Req() req: Request) {
+    try {
+      const cookie = req.cookies['access_token'];
+      const data = await this.jwtService.verifyAsync(cookie);
+      return data;
+    } catch (error) {
+      throw new UnauthorizedException();
+    }
   }
 }

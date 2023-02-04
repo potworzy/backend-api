@@ -9,6 +9,7 @@ async function bootstrap() {
   app.enableCors({
     credentials: true,
     origin: 'http://localhost:4200',
+    methods: ['POST', 'GET', 'PATCH', 'PUT', 'DELETE'],
   });
   app.setGlobalPrefix('api/v1');
   app.use(cookieParser());

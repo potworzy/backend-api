@@ -23,8 +23,8 @@ export class GameService {
         id: true,
         createDateTime: true,
         lastChangedDateTime: true,
-        name: true,
-        descripton: true,
+        title: true,
+        description: true,
         finished: true,
         user: {
           id: true,

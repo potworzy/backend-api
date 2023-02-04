@@ -2,10 +2,10 @@ import { IsBoolean, IsNumber, IsString } from 'class-validator';
 
 export class GameDto {
   @IsString()
-  name?: string;
+  title?: string;
 
   @IsString()
-  descripton?: string;
+  description?: string;
 
   @IsBoolean()
   finished?: boolean;
