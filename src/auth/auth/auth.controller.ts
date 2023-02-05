@@ -32,11 +32,12 @@ export class AuthController {
     @Res() res: Response,
   ) {
     const user = await this.authService.register({ email, password, name });
-    await this.authService.setAuthToken(res, {
+    const data = await this.authService.setAuthToken(res, {
       user_id: user.id,
     });
     return res.json({
       ...user,
+      expiresAuth: data.expiresAuth,
       password: undefined,
     });
   }
@@ -45,11 +46,12 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async login(@Body() { email, password }: LoginUserDto, @Res() res: Response) {
     const user = await this.authService.login({ email, password });
-    await this.authService.setAuthToken(res, {
+    const data = await this.authService.setAuthToken(res, {
       user_id: user.id,
     });
     return res.json({
       ...user,
+      expiresAuth: data.expiresAuth,
       password: undefined,
     });
   }
@@ -72,23 +74,13 @@ export class AuthController {
       req.user.refreshToken,
     );
 
-    await this.authService.setAuthToken(res, {
+    const data = await this.authService.setAuthToken(res, {
       user_id: req.user.id,
     });
 
     res.json({
       message: 'Token refreshed',
+      expiresAuth: data.expiresAuth,
     });
-  }
-  @Get('user')
-  @UseGuards(JwtAuthGuard)
-  async getUser(@Req() req: Request) {
-    try {
-      const cookie = req.cookies['access_token'];
-      const data = await this.jwtService.verifyAsync(cookie);
-      return data;
-    } catch (error) {
-      throw new UnauthorizedException();
-    }
   }
 }

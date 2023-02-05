@@ -7,7 +7,6 @@ import {
   Param,
   Patch,
   Post,
-  Put,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -24,7 +23,6 @@ export class GameController {
   constructor(private readonly gameService: GameService) {}
   @Get('mygames')
   async getOwnerGames(@Req() req: Request) {
-    console.log('wysyłam');
     return await this.gameService.getMyGames(req);
   }
   @Get('mygames/:id')

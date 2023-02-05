@@ -54,20 +54,24 @@ export class AuthService {
   async setAuthToken(
     res,
     payload,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
+  ): Promise<{
+    accessToken: string;
+    refreshToken: string;
+    expiresAuth: Date;
+  }> {
     const [accessToken, refreshToken] = this.generateTokens(payload);
 
     await this.userService.update(payload.user_id, {
       refreshToken: bcrypt.hashSync(refreshToken, 8),
     });
-
+    const expiresAuth = new Date(
+      Date.now() + this.configService.get('JWT_EXPIRATION_SECRET') * 1000,
+    );
     res
       .cookie('access_token', accessToken, {
         httpOnly: true,
         domain: this.configService.get('DOMAIN'),
-        expires: new Date(
-          Date.now() + this.configService.get('JWT_EXPIRATION_SECRET') * 1000,
-        ),
+        expires: expiresAuth,
       })
       .cookie('refresh_token', refreshToken, {
         httpOnly: true,
@@ -78,7 +82,7 @@ export class AuthService {
         ),
       });
 
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken, expiresAuth };
   }
 
   async clearAuthTokens(res, user_id) {
