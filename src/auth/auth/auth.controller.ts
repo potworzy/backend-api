@@ -79,8 +79,11 @@ export class AuthController {
     });
 
     res.json({
-      message: 'Token refreshed',
+      ...req.user,
       expiresAuth: data.expiresAuth,
+      password: undefined,
+      // message: 'Token refreshed',
+      // expiresAuth: data.expiresAuth,
     });
   }
 }
