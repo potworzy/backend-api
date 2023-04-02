@@ -28,10 +28,15 @@ export class AuthController {
 
   @Post('register')
   async register(
-    @Body() { email, password, name }: CreateUserDto,
+    @Body() { email, password, confirmPassword, name }: CreateUserDto,
     @Res() res: Response,
   ) {
-    const user = await this.authService.register({ email, password, name });
+    const user = await this.authService.register({
+      email,
+      password,
+      confirmPassword,
+      name,
+    });
     const data = await this.authService.setAuthToken(res, {
       user_id: user.id,
     });

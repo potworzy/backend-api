@@ -28,6 +28,7 @@ export class VoteService {
 
   async findAll(roundId: string) {
     return await this.voteRepository.find({
+      relations: ['round'],
       where: { round: { id: roundId } },
     });
   }

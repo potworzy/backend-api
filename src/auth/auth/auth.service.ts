@@ -20,7 +20,10 @@ export class AuthService {
   ) {}
 
   async register(
-    user: Pick<CreateUserDto, 'email' | 'password' | 'name'>,
+    user: Pick<
+      CreateUserDto,
+      'email' | 'password' | 'confirmPassword' | 'name'
+    >,
   ): Promise<User> {
     return this.userService.create(user);
   }
