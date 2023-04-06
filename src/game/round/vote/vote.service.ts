@@ -6,7 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Vote } from './vote.entity';
-import { UserService } from '../../..//auth/user/user.service';
+import { UserService } from '../../../auth/user/user.service';
 import { RoundService } from '../round.service';
 
 @Injectable()
@@ -28,6 +28,7 @@ export class VoteService {
 
   async findAll(roundId: string) {
     return await this.voteRepository.find({
+      relations: ['round'],
       where: { round: { id: roundId } },
     });
   }
