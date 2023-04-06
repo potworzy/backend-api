@@ -13,30 +13,28 @@ export class GameService {
     return await this.gameRepository.save(data);
   }
   async getById(gameId: string): Promise<Game> {
-    return await this.gameRepository.findOne({
-      relations: ['user', 'moderator'],
-      where: {
-        id: gameId,
-      },
-      select: {
-        id: true,
-        createDateTime: true,
-        lastChangedDateTime: true,
-        title: true,
-        description: true,
-        finished: true,
-        user: {
-          id: true,
-          name: true,
-          email: true,
-        },
-        moderator: {
-          id: true,
-          name: true,
-          email: true,
-        },
-      },
-    });
+    return await this.gameRepository
+      .createQueryBuilder('game')
+      .select([
+        'game.id',
+        'game.title',
+        'game.createDateTime',
+        'game.lastChangedDateTime',
+        'game.description',
+        'round.name',
+        'round.description',
+        'round.finished',
+        'round.createDateTime',
+        'vote.value',
+        'voted.email',
+        'voted.name',
+      ])
+      .leftJoin('game.rounds', 'round')
+      .orderBy('round.createDateTime', 'ASC')
+      .leftJoin('round.votes', 'vote')
+      .leftJoin('vote.user', 'voted')
+      .where(`game.id = '${gameId}'`)
+      .getOne();
   }
   async getMyGames(req): Promise<Game[]> {
     return await this.gameRepository.find({
