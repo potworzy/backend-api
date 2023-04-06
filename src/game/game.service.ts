@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UpdateGameDto } from './dto/update-game.dto';
 import { Game } from './game.entity';
-import { Round } from './round/round.entity';
 
 @Injectable()
 export class GameService {

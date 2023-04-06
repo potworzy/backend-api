@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
-import { createQueryBuilder, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { GameService } from '../game.service';
 import { CreateRoundDto } from './dto/create-round.dto';
 import { UpdateRoundDto } from './dto/update-round.dto';
@@ -39,15 +39,7 @@ export class RoundService {
   async findAll(id: string) {
     return await this.roundRepository.find({
       where: { game: { id } },
-      relations: ['vote'],
     });
-    // const r = await this.roundRepository
-    //   .createQueryBuilder('round')
-    //   .leftJoinAndSelect('votes', 'vote')
-    //   .where('round.gameId = :id', { id })
-    //   .getMany();
-    // console.log('Zapytanie ', r);
-    // return r;
   }
 
   async findOne(roundId: string) {
